@@ -19,7 +19,6 @@ body,
 .luxury-card,
 .nav-item,
 .nav-container,
-.creative-project-card,
 button,
 a,
 .mag-icon {
@@ -27,6 +26,13 @@ a,
     color 0.4s var(--transition-cinematic),
     border-color 0.4s var(--transition-cinematic),
     transform 0.4s var(--transition-cinematic),
+    box-shadow 0.4s var(--transition-cinematic);
+}
+
+.creative-project-card {
+  transition: background-color 0.4s var(--transition-cinematic),
+    color 0.4s var(--transition-cinematic),
+    border-color 0.4s var(--transition-cinematic),
     box-shadow 0.4s var(--transition-cinematic);
 }
 

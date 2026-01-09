@@ -8,16 +8,9 @@ const getMonthsBetween = (startDate, endDate = null) => {
     const end = endDate ? new Date(endDate) : new Date();
 
     // Calculate raw months difference
-    let months =
+    const months =
         (end.getFullYear() - start.getFullYear()) * 12 +
-        (end.getMonth() - start.getMonth());
-
-    // Day-based adjustment:
-    // If the end day is less than the start day, the current month has 
-    // "started but is not complete", so we don't count it.
-    if (end.getDate() < start.getDate()) {
-        months--;
-    }
+        (end.getMonth() - start.getMonth()) + 1; // +1 for inclusive count
 
     return Math.max(months, 0);
 };

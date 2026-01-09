@@ -6,6 +6,15 @@ import { Send, Mail, Phone, Github, Twitter, Linkedin, ArrowRight, MapPin } from
 
 export default function Contact() {
     const [focusedField, setFocusedField] = useState(null);
+    const [time, setTime] = useState(null);
+
+    React.useEffect(() => {
+        setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
+        const timer = setInterval(() => {
+            setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
+        }, 60000);
+        return () => clearInterval(timer);
+    }, []);
 
     const contactInfo = [
         { icon: <Mail size={18} />, label: 'Email', value: 'nikamritesh778@gmail.com', href: 'mailto:nikamritesh778@gmail.com' },
@@ -178,7 +187,7 @@ export default function Contact() {
                         }}>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
                                 <span style={{ fontSize: '10px', textTransform: 'uppercase', fontWeight: 700, opacity: 0.6 }}>Local Time</span>
-                                <span style={{ fontSize: '18px', fontWeight: 800 }}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })} IST</span>
+                                <span style={{ fontSize: '18px', fontWeight: 800 }}>{time || '--:--'} IST</span>
                             </div>
                             <div style={{ textAlign: 'right' }}>
                                 <span style={{ fontSize: '10px', textTransform: 'uppercase', fontWeight: 700, opacity: 0.6 }}>Status</span>

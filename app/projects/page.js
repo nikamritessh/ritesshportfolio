@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useSpring, AnimatePresence, useMotionValue, useTransform, useMotionTemplate } from 'framer-motion';
 import { ArrowUpRight, Github, X, Shield, Eye, Brain, Activity, Clock, Heart, Zap, Play, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import Portal from '../components/Portal';
@@ -21,9 +21,8 @@ const iconMap = {
 
 const ProjectCard = ({ project, index, onOpen }) => {
     const cardRef = useRef(null);
-    const [rotateX, setRotateX] = useState(0);
-    const [rotateY, setRotateY] = useState(0);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
     const handleMouseMove = (e) => {
         if (!cardRef.current) return;
@@ -31,32 +30,19 @@ const ProjectCard = ({ project, index, onOpen }) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateXVal = ((y - centerY) / centerY) * 12;
-        const rotateYVal = ((centerX - x) / centerX) * 12;
-
-        setRotateX(rotateXVal);
-        setRotateY(rotateYVal);
-        setMousePos({ x, y });
+        mouseX.set(x);
+        mouseY.set(y);
     };
 
-    const handleMouseLeave = () => {
-        setRotateX(0);
-        setRotateY(0);
-    };
-
-    const springConfig = { damping: 25, stiffness: 150 };
+    const spotlightBackground = useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, ${project.color}15, transparent 80%)`;
 
     return (
         <motion.div
             ref={cardRef}
             onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
             onClick={() => onOpen(project)}
-            initial={{ opacity: 0, y: 50, rotateY: 20 }}
-            whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{
                 duration: 1.2,
@@ -65,8 +51,6 @@ const ProjectCard = ({ project, index, onOpen }) => {
             }}
             style={{
                 perspective: 1200,
-                rotateX: useSpring(rotateX, springConfig),
-                rotateY: useSpring(rotateY, springConfig),
                 cursor: 'pointer'
             }}
             className="creative-project-card group"
@@ -75,10 +59,10 @@ const ProjectCard = ({ project, index, onOpen }) => {
             <div className="card-bg-number">{index + 1}</div>
 
             {/* Spotlight Glow Effect */}
-            <div
+            <motion.div
                 className="card-spotlight"
                 style={{
-                    background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, ${project.color}15, transparent 80%)`
+                    background: spotlightBackground
                 }}
             />
 
